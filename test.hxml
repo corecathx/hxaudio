@@ -1,0 +1,8 @@
+-cp tests
+
+--library hxaudio
+-main Main
+
+-cpp bin/cpp
+--debug
+--cmd bin/cpp/Main.exe

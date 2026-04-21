@@ -1,0 +1,16 @@
+{
+    "name": "hxaudio",
+    "url": "https://github.com/corecathx/hxaudio",
+    "license": "MIT",
+    "tags": ["audio", "sound", "midi", "ogg", "wav"],
+    "description": "A wrapper for grig.audio that makes it easier to use with less boilerplate.",
+    "classPath": "src/",
+    "releasenote": "Initial release.",
+    "contributors": ["CoreCat"],
+    "version": "0.1.0",
+    "dependencies": {
+        "grig.audio": "",
+        "stb_ogg_sound": "",
+        "format": ""
+    }
+}

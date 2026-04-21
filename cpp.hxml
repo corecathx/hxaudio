@@ -1,0 +1,8 @@
+-cp src
+--library tink_core
+--library grig.audio
+--library format
+--library stb_ogg_sound
+--main Test
+--cpp bin/cpp
+--cmd bin\cpp\Test.exe
