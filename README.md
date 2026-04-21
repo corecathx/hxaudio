@@ -1,5 +1,5 @@
 # hxaudio
-**hxaudio** is a wrapper for [grig.audio](grig.tech) that makes it easier to use with less boilerplate.
+**hxaudio** is a wrapper for [grig.audio](https://grig.tech) that makes it easier to use with less boilerplate.
 
 Supports WAV, OGG, and MIDI playback, plus FFT-based frequency analysis.
 
@@ -7,19 +7,45 @@ Supports WAV, OGG, and MIDI playback, plus FFT-based frequency analysis.
 
 soon
 
-## Example
+## Examples
+
+### Playing a sound
 
 ```haxe
-var input:hxaudio.AudioInput = new hxaudio.AudioInput();
-input.onProcess = (sample:Float) -> {} // `sample` is retrieved from the input source.
-var output:hxaudio.AudioOutput = new hxaudio.AudioOutput();
-output.onProcess = () -> {
-    output.write(Math.random(), Math.random()); // write random noise to the speaker.
-}
-var engine:hxaudio.AudioEngine = new hxaudio.AudioEngine(input, output);
+var engine = new hxaudio.AudioEngine(null, new hxaudio.AudioOutput());
+engine.start();
+
+Sound.load("music.ogg").play();
+```
+
+### Microphone input
+
+```haxe
+var input = new hxaudio.AudioInput();
+input.onProcess = (sample:Float) -> trace(sample);
+
+var engine = new hxaudio.AudioEngine(input, new hxaudio.AudioOutput());
 engine.start();
 ```
 
+### FFT analysis
+
+```haxe
+var analyzer = new hxaudio.Analyzer();
+engine.onPostProcess = (l, r) -> analyzer.feed(l, r);
+
+var bands = analyzer.getBands(32); // 32 bands, normalized 0..1
+```
+
+### Raw output
+
+```haxe
+var output = new hxaudio.AudioOutput();
+output.onProcess = () -> output.write(Math.random(), Math.random());
+
+var engine = new hxaudio.AudioEngine(null, output);
+engine.start();
+```
 
 ## Dependencies
 
