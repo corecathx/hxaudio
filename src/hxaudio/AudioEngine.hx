@@ -16,6 +16,7 @@ import grig.audio.AudioInterface;
  * engine.start();
  * ```
  */
+@:allow(hxaudio.sound.Sound)
 class AudioEngine {
     /**
      * Current active AudioEngine instance.
@@ -155,6 +156,20 @@ class AudioEngine {
     public function addSound(p:IPlayer) {
         _mutex.acquire();
         sounds.push(p);
+        _mutex.release();
+    }
+
+    /**
+     * Executes a function within the safety of the engine's mutex.
+     */
+    public function syncJob(fn:Void->Void) {
+        _mutex.acquire();
+        try {
+            fn();
+        } catch(e:Dynamic) {
+            _mutex.release();
+            throw e;
+        }
         _mutex.release();
     }
 }

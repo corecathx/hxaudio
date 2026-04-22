@@ -29,24 +29,26 @@ import hxaudio.AudioEngine;
  */
 class Sound {
     var player:IPlayer;
+    var engine:AudioEngine;
+
     /**
      * Playback volume. Defaults to 1.
      */
     public var volume(get, set):Float;
     function get_volume() return player.volume;
-    function set_volume(v:Float) return player.volume = v;
+    function set_volume(v:Float) { engine.syncJob(() -> player.volume = v); return v; }
     /**
      * Whether the sound should loop. Defaults to false.
      */
     public var loop(get, set):Bool;
     function get_loop() return player.loop;
-    function set_loop(v:Bool) return player.loop = v;
+    function set_loop(v:Bool) { engine.syncJob(() -> player.loop = v); return v; }
     /**
      * Playback pitch/speed multiplier. Defaults to 1.
      */
     public var pitch(get, set):Float;
     function get_pitch() return player.pitch;
-    function set_pitch(v:Float) return player.pitch = v;
+    function set_pitch(v:Float) { engine.syncJob(() -> player.pitch = v); return v; }
     /**
      * Whether the sound has finished playing.
      */
@@ -70,12 +72,12 @@ class Sound {
      */
     function new(player:IPlayer) {
         this.player = player;
-        var engine:AudioEngine = AudioEngine.instance;
+        this.engine = AudioEngine.instance;
         if (engine == null) throw "No active AudioEngine. Call AudioEngine.start() first.";
         engine.addSound(player);
     }
     /**
-     * Load a sound file. Supports `.wav` and `.ogg`.
+     * Load a sound file. Supports `.wav`, `.ogg`, and `.mid`.
      * Automatically picks the right player based on file extension.
      * @param path Path to the sound file.
      */
@@ -85,31 +87,42 @@ class Sound {
             case 'mid': new Sound(new MidiPlayer(Midi.parse(path)));
             case 'wav': new Sound(new WavPlayer(new WavReader(new BytesInput(File.getBytes(path))).read()));
             case 'ogg': new Sound(new OggPlayer(File.getBytes(path)));
-            default: throw 'Unsupported audio format: $ext. Supported formats: wav, ogg';
+            default: throw 'Unsupported audio format: $ext. Supported formats: wav, ogg, mid';
         }
     }
     /**
      * Start playback.
      */
-    public function play():Sound { player.play(); return this; }
+    public function play():Sound {
+        engine.syncJob(() -> player.play());
+        return this;
+    }
     /**
      * Pause playback.
      */
-    public function pause():Sound { player.pause(); return this; }
+    public function pause():Sound {
+        engine.syncJob(() -> player.pause());
+        return this;
+    }
     /**
      * Stop playback and reset position.
      */
-    public function stop():Sound { player.stop(); return this; }
+    public function stop():Sound {
+        engine.syncJob(() -> player.stop());
+        return this;
+    }
     /**
      * Seek to a specific time in milliseconds.
      * @param ms Time in milliseconds.
      */
-    public function seek(ms:Float):Sound { player.seek(ms); return this; }
-
+    public function seek(ms:Float):Sound {
+        engine.syncJob(() -> player.seek(ms));
+        return this;
+    }
     /**
      * Remove sound from AudioEngine.
      */
     public function dispose() {
-        AudioEngine.instance.sounds.remove(player);
+        engine.syncJob(() -> engine.sounds.remove(player));
     }
 }
