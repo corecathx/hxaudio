@@ -72,7 +72,7 @@ class Sound {
         this.player = player;
         var engine:AudioEngine = AudioEngine.instance;
         if (engine == null) throw "No active AudioEngine. Call AudioEngine.start() first.";
-        engine.sounds.push(player);
+        engine.addSound(player);
     }
     /**
      * Load a sound file. Supports `.wav` and `.ogg`.
