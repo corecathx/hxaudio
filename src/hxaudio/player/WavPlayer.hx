@@ -37,7 +37,8 @@ class WavPlayer implements IPlayer {
         totalFrames = Std.int(data.length / (channels * bytesPerSample));
     }
     public function play() {
-        seek(0);
+        if (playing)
+            seek(0);
         playing = true;
     }
     public function pause() playing = false;

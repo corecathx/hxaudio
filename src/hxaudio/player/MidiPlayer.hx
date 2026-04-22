@@ -78,7 +78,11 @@ class MidiPlayer implements IPlayer {
         recomputeTiming();
     }
 
-    public function play()  { playing = true; }
+    public function play() {         
+        if (playing)
+            seek(0);
+        playing = true; 
+    }
     public function pause() { playing = false; }
     public function stop() {
         playing = false;

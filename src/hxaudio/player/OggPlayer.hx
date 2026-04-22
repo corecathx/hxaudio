@@ -65,7 +65,8 @@ class OggPlayer implements IPlayer {
         return buffer.getFloat(bytePos);
     }
     public function play() {
-        seek(0);
+        if (playing)
+            seek(0);
         playing = true;
     }
     public function pause() playing = false;
