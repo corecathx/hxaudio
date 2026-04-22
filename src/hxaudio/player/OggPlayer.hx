@@ -68,6 +68,7 @@ class OggPlayer implements IPlayer {
         if (playing)
             seek(0);
         playing = true;
+        _finished = false;
     }
     public function pause() playing = false;
     public function stop() {
