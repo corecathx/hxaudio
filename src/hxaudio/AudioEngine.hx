@@ -114,7 +114,6 @@ class AudioEngine {
                         output.pendingL += s.l;
                         output.pendingR += s.r;
                     }
-                    sounds = sounds.filter(s -> !s.finished || s.loop);
                     _mutex.release();
 
                     if (mic != null && input != null && input.onProcess != null)

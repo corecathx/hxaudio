@@ -67,8 +67,8 @@ class OggPlayer implements IPlayer {
     public function play() {
         if (playing)
             seek(0);
-        playing = true;
         _finished = false;
+        playing = true;
     }
     public function pause() playing = false;
     public function stop() {
@@ -85,7 +85,10 @@ class OggPlayer implements IPlayer {
     public function process():{l:Float, r:Float} {
         if (_finished) {
             if (loop) { seek(0); playing = true; }
-            else return {l: 0, r: 0};
+            else {
+                playing = false;
+                return {l: 0, r: 0};
+            }
         }
         if (!playing) return {l: 0, r: 0};
         if (pendingSeek != null) {
